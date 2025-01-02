@@ -1,0 +1,1061 @@
+##
+## Please read the clamd.conf(5) manual before editing this file.
+##
+
+
+# Uncomment this option to enable logging.
+# LogFile must be writable for the user running daemon.
+# A full path is required.
+# Default: disabled
+{% if not clamd_log_path is none -%}
+LogFile {{ clamd_log_path }}
+{% endif %}
+
+# By default the log file is locked for writing - the lock protects against
+# running clamd multiple times (if want to run another clamd, please
+# copy the configuration file, change the LogFile variable, and run
+# the daemon with --config-file option).
+# This option disables log file locking.
+# Default: no
+{% if not clamd_log_unlock is none -%}
+LogFileUnlock {{ clamd_log_unlock }}
+{% endif %}
+
+# Maximum size of the log file.
+# Value of 0 disables the limit.
+# You may use 'M' or 'm' for megabytes (1M = 1m = 1048576 bytes)
+# and 'K' or 'k' for kilobytes (1K = 1k = 1024 bytes). To specify the size
+# in bytes just don't use modifiers. If LogFileMaxSize is enabled, log
+# rotation (the LogRotate option) will always be enabled.
+# Default: 1M
+{% if not clamd_log_filesize is none -%}
+LogFileMaxSize {{ clamd_log_filesize }}
+{% endif %}
+
+# Log time with each message.
+# Default: no
+{% if not clamd_log_time is none -%}
+LogTime {{ clamd_log_time }}
+{% endif %}
+
+# Also log clean files. Useful in debugging but drastically increases the
+# log size.
+# Default: no
+{% if not clamd_log_clean is none -%}
+LogClean {{ clamd_log_clean }}
+{% endif %}
+
+# Use system logger (can work together with LogFile).
+# Default: no
+{% if not clamd_log_syslog is none -%}
+LogSyslog {{ clamd_log_syslog }}
+{% endif %}
+
+# Specify the type of syslog messages - please refer to 'man syslog'
+# for facility names.
+# Default: LOG_LOCAL6
+{% if not clamd_log_facility is none -%}
+LogFacility {{ clamd_log_facility }}
+{% endif %}
+
+# Enable verbose logging.
+# Default: no
+{% if not clamd_log_verbose is none -%}
+LogVerbose {{ clamd_log_verbose }}
+{% endif %}
+
+# Enable log rotation. Always enabled when LogFileMaxSize is enabled.
+# Default: no
+{% if not clamd_log_rotate is none -%}
+LogRotate {{ clamd_log_rotate }}
+{% endif %}
+
+# Enable Prelude output.
+# Default: no
+{% if not clamd_log_prelude is none -%}
+PreludeEnable {{ clamd_log_prelude }}
+{% endif %}
+#
+# Set the name of the analyzer used by prelude-admin.
+# Default: ClamAV
+{% if not clamd_log_prelude_name is none -%}
+PreludeAnalyzerName {{ clamd_log_prelude_name }}
+{% endif %}
+
+# Log additional information about the infected file, such as its
+# size and hash, together with the virus name.
+{% if not clamd_log_extended_info is none -%}
+ExtendedDetectionInfo {{ clamd_log_extended_info }}
+{% endif %}
+
+# This option allows you to save a process identifier of the listening
+# daemon.
+# This file will be owned by root, as long as clamd was started by root.
+# It is recommended that the directory where this file is stored is
+# also owned by root to keep other users from tampering with it.
+# Default: disabled
+#PidFile /run/clamav/clamd.pid
+
+# Optional path to the global temporary directory.
+# Default: system specific (usually /tmp or /var/tmp).
+#TemporaryDirectory /var/tmp
+
+# Path to the database directory.
+# Default: hardcoded (depends on installation options)
+{% if not clamd_db_directory is none -%}
+DatabaseDirectory {{ clamd_db_directory }}
+{% endif %}
+
+# Only load the official signatures published by the ClamAV project.
+# Default: no
+{% if not clamd_db_official_only is none -%}
+OfficialDatabaseOnly {{ clamd_db_official_only }}
+{% endif %}
+
+# Return with a nonzero error code if the virus database is older than
+# the specified number of days.
+# Default: -1
+{% if not clamd_db_cvd_age_fail is none -%}
+FailIfCvdOlderThan {{ clamd_db_cvd_age_fail }}
+{% endif %}
+
+# The daemon can work in local mode, network mode or both.
+# Due to security reasons we recommend the local mode.
+
+# Path to a local socket file the daemon will listen on.
+# Default: disabled (must be specified by a user)
+{% if not clamd_socket is none -%}
+LocalSocket {{ clamd_socket }}
+{% endif %}
+
+# Sets the group ownership on the unix socket.
+# Default: disabled (the primary group of the user running clamd)
+{% if not clamd_socket_group is none -%}
+LocalSocketGroup {{ clamd_socket_group }}
+{% endif %}
+
+# Sets the permissions on the unix socket to the specified mode.
+# Default: disabled (socket is world accessible)
+{% if not clamd_socket_mode is none -%}
+LocalSocketMode {{ clamd_socket_mode }}
+{% endif %}
+
+# Remove stale socket after unclean shutdown.
+# Default: yes
+#FixStaleSocket no
+
+# TCP port address.
+# Default: no
+{% if not clamd_socket_port is none -%}
+TCPSocket {{ clamd_socket_port }}
+{% endif %}
+
+# TCP address.
+# By default we bind to INADDR_ANY, probably not wise.
+# Enable the following to provide some degree of protection
+# from the outside world. This option can be specified multiple
+# times if you want to listen on multiple IPs. IPv6 is now supported.
+# Default: no
+{% if not clamd_socket_addr is none -%}
+TCPAddr {{ clamd_socket_addr }}
+{% endif %}
+
+# Maximum length the queue of pending connections may grow to.
+# Default: 200
+#MaxConnectionQueueLength 30
+
+# Clamd uses FTP-like protocol to receive data from remote clients.
+# If you are using clamav-milter to balance load between remote clamd daemons
+# on firewall servers you may need to tune the options below.
+
+# Close the connection when the data size limit is exceeded.
+# The value should match your MTA's limit for a maximum attachment size.
+# Default: 100M
+{% if not clamd_socket_stream_mlength is none -%}
+StreamMaxLength {{ clamd_socket_stream_mlength }}
+{% endif %}
+
+# Limit port range.
+# Default: 1024
+{% if not clamd_socket_stream_lport is none -%}
+StreamMinPort {{ clamd_socket_stream_lport }}
+{% endif %}
+# Default: 2048
+{% if not clamd_socket_stream_uport is none -%}
+StreamMaxPort {{ clamd_socket_stream_uport }}
+{% endif %}
+
+# Maximum number of threads running at the same time.
+# Default: 10
+{% if not clamd_max_threads is none -%}
+MaxThreads {{ clamd_max_threads }}
+{% endif %}
+
+# Waiting for data from a client socket will timeout after this time (seconds).
+# Default: 120
+#ReadTimeout 300
+
+# This option specifies the time (in seconds) after which clamd should
+# timeout if a client doesn't provide any initial command after connecting.
+# Default: 30
+#CommandReadTimeout 30
+
+# This option specifies how long to wait (in milliseconds) if the send buffer
+# is full.
+# Keep this value low to prevent clamd hanging.
+#
+# Default: 500
+#SendBufTimeout 200
+
+# Maximum number of queued items (including those being processed by
+# MaxThreads threads).
+# It is recommended to have this value at least twice MaxThreads if possible.
+# WARNING: you shouldn't increase this too much to avoid running out  of file
+# descriptors, the following condition should hold:
+# MaxThreads*MaxRecursion + (MaxQueue - MaxThreads) + 6< RLIMIT_NOFILE (usual
+# max is 1024).
+#
+# Default: 100
+#MaxQueue 200
+
+# Waiting for a new job will timeout after this time (seconds).
+# Default: 30
+#IdleTimeout 60
+
+# Don't scan files and directories matching regex
+# This directive can be used multiple times
+# Default: scan all
+#ExcludePath ^/proc/
+#ExcludePath ^/sys/
+{% for path in clamd_scan_excl_path -%}
+ExcludePath {{ path }}
+{% endfor %}
+
+# Maximum depth directories are scanned at.
+# Default: 15
+{% if not clamd_max_dir_recursion is none -%}
+MaxDirectoryRecursion {{ clamd_max_dir_recursion }}
+{% endif %}
+
+# Follow directory symlinks.
+# Default: no
+{% if not clamd_follow_dir_symlinks is none -%}
+FollowDirectorySymlinks {{ clamd_follow_dir_symlinks }}
+{% endif %}
+
+# Follow regular file symlinks.
+# Default: no
+{% if not clamd_follow_file_symlinks is none -%}
+FollowFileSymlinks {{ clamd_follow_file_symlinks }}
+{% endif %}
+
+# Scan files and directories on other filesystems.
+# Default: yes
+{% if not clamd_x_filesystems is none -%}
+CrossFilesystems {{ clamd_x_filesystems }}
+{% endif %}
+
+# Perform a database check.
+# Default: 600 (10 min)
+SelfCheck 3600
+
+# Enable non-blocking (multi-threaded/concurrent) database reloads.
+# This feature will temporarily load a second scanning engine while scanning
+# continues using the first engine. Once loaded, the new engine takes over.
+# The old engine is removed as soon as all scans using the old engine have
+# completed.
+# This feature requires more RAM, so this option is provided in case users are
+# willing to block scans during reload in exchange for lower RAM requirements.
+# Default: yes
+#ConcurrentDatabaseReload no
+
+# Execute a command when virus is found.
+# Use the following environment variables to identify the file and virus names:
+# - $CLAM_VIRUSEVENT_FILENAME
+# - $CLAM_VIRUSEVENT_VIRUSNAME
+# In the command string, '%v' will also be replaced with the virus name.
+# Note: The '%f' filename format character has been disabled and will no longer
+# be replaced with the file name, due to command injection security concerns.
+# Use the 'CLAM_VIRUSEVENT_FILENAME' environment variable instead.
+# For the same reason, you should NOT use the environment variables in the
+# command directly, but should use it carefully from your executed script.
+# Default: no
+{% if not clamd_virus_event is none -%}
+VirusEvent {{ clamd_virus_event }}
+{% endif %}
+
+# Run as another user (clamd must be started by root for this option to work)
+# Default: don't drop privileges
+#User clamav
+
+# Stop daemon when libclamav reports out of memory condition.
+{% if not clamd_exit_oom is none -%}
+ExitOnOOM {{ clamd_exit_oom }}
+{% endif %}
+
+# Don't fork into background.
+# Default: no
+{% if not clamd_foreground is none -%}
+Foreground {{ clamd_foreground }}
+{% endif %}
+
+# Enable debug messages in libclamav.
+# Default: no
+{% if not clamd_debug is none -%}
+Debug {{ clamd_debug }}
+{% endif %}
+
+# Do not remove temporary files (for debug purposes).
+# Default: no
+{% if not clamd_leave_tmp_files is none -%}
+LeaveTemporaryFiles {{ clamd_leave_tmp_files }}
+{% endif %}
+
+# Record metadata about the file being scanned.
+# Scan metadata is useful for file analysis purposes and for debugging scan behavior.
+# The JSON metadata will be printed after the scan is complete if Debug is enabled.
+# A metadata.json file will be written to the scan temp directory if LeaveTemporaryFiles is enabled.
+# Default: no
+{% if not clamd_getn_metadata_json is none -%}
+GenerateMetadataJson {{ clamd_getn_metadata_json }}
+{% endif %}
+
+# Store URLs found in html files to the json metadata.
+# URLs will be stored in an array with the tag 'HTMLUrls'
+# GenerateMetadataJson is required for this feature.
+# Default: yes (if GenerateMetadataJson is used)
+{% if not clamd_json_html_urls is none -%}
+JsonStoreHTMLUrls {{ clamd_json_html_urls }}
+{% endif %}
+
+# Permit use of the ALLMATCHSCAN command. If set to no, clamd will reject
+# any ALLMATCHSCAN command as invalid.
+# Default: yes
+{% if not clamd_allow_matchscan is none -%}
+AllowAllMatchScan {{ clamd_allow_matchscan }}
+{% endif %}
+
+# Detect Possibly Unwanted Applications.
+# Default: no
+{% if not clamd_scan_pua is none -%}
+DetectPUA {{ clamd_scan_pua }}
+{% endif %}
+
+# Exclude a specific PUA category. This directive can be used multiple times.
+# See https://github.com/vrtadmin/clamav-faq/blob/master/faq/faq-pua.md for
+# the complete list of PUA categories.
+# Default: Load all categories (if DetectPUA is activated)
+{% for pua in clamd_scan_excl_pua -%}
+ExcludePUA {{ pua }}
+{% endfor %}
+
+# Only include a specific PUA category. This directive can be used multiple
+# times.
+# Default: Load all categories (if DetectPUA is activated)
+{% for pua in clamd_scan_incl_pua -%}
+IncludePUA {{ pua }}
+{% endfor %}
+
+# This option causes memory or nested map scans to dump the content to disk.
+# If you turn on this option, more data is written to disk and is available
+# when the LeaveTemporaryFiles option is enabled.
+{% if not clamd_force_disk is none -%}
+ForceToDisk {{ clamd_force_disk }}
+{% endif %}
+
+# This option allows you to disable the caching feature of the engine. By
+# default, the engine will store an MD5 in a cache of any files that are
+# not flagged as virus or that hit limits checks. Disabling the cache will
+# have a negative performance impact on large scans.
+# Default: no
+{% if not clamd_dis_cache is none -%}
+DisableCache {{ clamd_dis_cache }}
+{% endif %}
+
+# This option allows you to set the number of entries the cache can store.
+# The value should be a square number or will be rounded up to the nearest
+# square number.
+#CacheSize 65536
+
+# In some cases (eg. complex malware, exploits in graphic files, and others),
+# ClamAV uses special algorithms to detect abnormal patterns and behaviors that
+# may be malicious.  This option enables alerting on such heuristically
+# detected potential threats.
+# Default: yes
+{% if not clamd_heur_alerts is none -%}
+HeuristicAlerts {{ clamd_heur_alerts }}
+{% endif %}
+
+# Allow heuristic alerts to take precedence.
+# When enabled, if a heuristic scan (such as phishingScan) detects
+# a possible virus/phish it will stop scan immediately. Recommended, saves CPU
+# scan-time.
+# When disabled, virus/phish detected by heuristic scans will be reported only
+# at the end of a scan. If an archive contains both a heuristically detected
+# virus/phish, and a real malware, the real malware will be reported
+#
+# Keep this disabled if you intend to handle "Heuristics.*" viruses
+# differently from "real" malware.
+# If a non-heuristically-detected virus (signature-based) is found first,
+# the scan is interrupted immediately, regardless of this config option.
+#
+# Default: no
+{% if not clamd_heur_scan_precedence is none -%}
+HeuristicScanPrecedence {{ clamd_heur_scan_precedence }}
+{% endif %}
+
+
+##
+## Heuristic Alerts
+##
+
+# With this option clamav will try to detect broken executables (both PE and
+# ELF) and alert on them with the Broken.Executable heuristic signature.
+# Default: no
+{% if not clamd_alert_broken_exec is none -%}
+AlertBrokenExecutables {{ clamd_alert_broken_exec }}
+{% endif %}
+
+# With this option clamav will try to detect broken media file (JPEG,
+# TIFF, PNG, GIF) and alert on them with a Broken.Media heuristic signature.
+# Default: no
+{% if not clamd_alert_broken_media is none -%}
+AlertBrokenMedia {{ clamd_alert_broken_media }}
+{% endif %}
+
+# Alert on encrypted archives _and_ documents with heuristic signature
+# (encrypted .zip, .7zip, .rar, .pdf).
+# Default: no
+{% if not clamd_alert_encrypted is none -%}
+AlertEncrypted {{ clamd_alert_encrypted }}
+{% endif %}
+
+# Alert on encrypted archives with heuristic signature (encrypted .zip, .7zip,
+# .rar).
+# Default: no
+{% if not clamd_alert_encrypted_arch is none -%}
+AlertEncryptedArchive {{ clamd_alert_encrypted_arch }}
+{% endif %}
+
+# Alert on encrypted archives with heuristic signature (encrypted .pdf).
+# Default: no
+{% if not clamd_alert_encrypted_doc is none -%}
+AlertEncryptedDoc {{ clamd_alert_encrypted_doc }}
+{% endif %}
+
+# With this option enabled OLE2 files containing VBA macros, which were not
+# detected by signatures will be marked as "Heuristics.OLE2.ContainsMacros".
+# Default: no
+{% if not clamd_alert_ole2_macros is none -%}
+AlertOLE2Macros {{ clamd_alert_ole2_macros }}
+{% endif %}
+
+# Alert on SSL mismatches in URLs, even if the URL isn't in the database.
+# This can lead to false positives.
+# Default: no
+{% if not clamd_alert_phish_ssl_mismatch is none -%}
+AlertPhishingSSLMismatch {{ clamd_alert_phish_ssl_mismatch }}
+{% endif %}
+
+# Alert on cloaked URLs, even if URL isn't in database.
+# This can lead to false positives.
+# Default: no
+{% if not clamd_alert_phish_cloak is none -%}
+AlertPhishingCloak {{ clamd_alert_phish_cloak }}
+{% endif %}
+
+# Alert on raw DMG image files containing partition intersections
+# Default: no
+{% if not clamd_alert_part_intersection is none -%}
+AlertPartitionIntersection {{ clamd_alert_part_intersection }}
+{% endif %}
+
+
+##
+## Executable files
+##
+
+# PE stands for Portable Executable - it's an executable file format used
+# in all 32 and 64-bit versions of Windows operating systems. This option
+# allows ClamAV to perform a deeper analysis of executable files and it's also
+# required for decompression of popular executable packers such as UPX, FSG,
+# and Petite. If you turn off this option, the original files will still be
+# scanned, but without additional processing.
+# Default: yes
+{% if not clamd_scan_pe is none -%}
+ScanPE {{ clamd_scan_pe }}
+{% endif %}
+
+# Certain PE files contain an authenticode signature. By default, we check
+# the signature chain in the PE file against a database of trusted and
+# revoked certificates if the file being scanned is marked as a virus.
+# If any certificate in the chain validates against any trusted root, but
+# does not match any revoked certificate, the file is marked as trusted.
+# If the file does match a revoked certificate, the file is marked as virus.
+# The following setting completely turns off authenticode verification.
+# Default: no
+{% if not clamd_dis_certcheck is none -%}
+DisableCertCheck {{ clamd_dis_certcheck }}
+{% endif %}
+
+# Executable and Linking Format is a standard format for UN*X executables.
+# This option allows you to control the scanning of ELF files.
+# If you turn off this option, the original files will still be scanned, but
+# without additional processing.
+# Default: yes
+{% if not clamd_scan_elf is none -%}
+ScanELF {{ clamd_scan_elf }}
+{% endif %}
+
+
+##
+## Documents
+##
+
+# This option enables scanning of OLE2 files, such as Microsoft Office
+# documents and .msi files.
+# If you turn off this option, the original files will still be scanned, but
+# without additional processing.
+# Default: yes
+{% if not clamd_scan_ole2 is none -%}
+ScanOLE2 {{ clamd_scan_ole2 }}
+{% endif %}
+
+# This option enables scanning within PDF files.
+# If you turn off this option, the original files will still be scanned, but
+# without decoding and additional processing.
+# Default: yes
+{% if not clamd_scan_pdf is none -%}
+ScanPDF {{ clamd_scan_pdf }}
+{% endif %}
+
+# This option enables scanning within SWF files.
+# If you turn off this option, the original files will still be scanned, but
+# without decoding and additional processing.
+# Default: yes
+{% if not clamd_scan_swf is none -%}
+ScanSWF {{ clamd_scan_swf }}
+{% endif %}
+
+# This option enables scanning xml-based document files supported by libclamav.
+# If you turn off this option, the original files will still be scanned, but
+# without additional processing.
+# Default: yes
+{% if not clamd_scan_xmldocs is none -%}
+ScanXMLDOCS {{ clamd_scan_xmldocs }}
+{% endif %}
+
+# This option enables scanning of HWP3 files.
+# If you turn off this option, the original files will still be scanned, but
+# without additional processing.
+# Default: yes
+{% if not clamd_scan_hwp3 is none -%}
+ScanHWP3 {{ clamd_scan_hwp3 }}
+{% endif %}
+
+# This option enables scanning of OneNote files.
+# If you turn off this option, the original files will still be scanned, but
+# without additional processing.
+# Default: yes
+{% if not clamd_scan_onenote is none -%}
+ScanOneNote {{ clamd_scan_onenote }}
+{% endif %}
+
+
+##
+## Other file types
+##
+
+# This option enables scanning of image (graphics).
+# If you turn off this option, the original files will still be scanned, but
+# without additional processing.
+# Default: yes
+{% if not clamd_scan_image is none -%}
+ScanImage {{ clamd_scan_image }}
+{% endif %}
+
+# This option enables detection by calculating a fuzzy hash of image (graphics)
+# files.
+# Signatures using image fuzzy hashes typically match files and documents by
+# identifying images embedded or attached to those files.
+# If you turn off this option, then some files may no longer be detected.
+# Default: yes
+{% if not clamd_scan_image_fuzz is none -%}
+ScanImageFuzzyHash {{ clamd_scan_image_fuzz }}
+{% endif %}
+
+
+##
+## Mail files
+##
+
+# Enable internal e-mail scanner.
+# If you turn off this option, the original files will still be scanned, but
+# without parsing individual messages/attachments.
+# Default: yes
+{% if not clamd_scan_mail is none -%}
+ScanMail {{ clamd_scan_mail }}
+{% endif %}
+
+# Scan RFC1341 messages split over many emails.
+# You will need to periodically clean up $TemporaryDirectory/clamav-partial
+# directory.
+# WARNING: This option may open your system to a DoS attack.
+#	   Never use it on loaded servers.
+# Default: no
+{% if not clamd_scan_part_mess is none -%}
+ScanPartialMessages {{ clamd_scan_part_mess }}
+{% endif %}
+
+# With this option enabled ClamAV will try to detect phishing attempts by using
+# HTML.Phishing and Email.Phishing NDB signatures.
+# Default: yes
+{% if not clamd_phish_signatures is none -%}
+PhishingSignatures {{ clamd_phish_signatures }}
+{% endif %}
+
+# With this option enabled ClamAV will try to detect phishing attempts by
+# analyzing URLs found in emails using WDB and PDB signature databases.
+# Default: yes
+{% if not clamd_phish_scan_urls is none -%}
+PhishingScanURLs {{ clamd_phish_scan_urls }}
+{% endif %}
+
+
+##
+## Data Loss Prevention (DLP)
+##
+
+# Enable the DLP module
+# Default: No
+{% if not clamd_dlp is none -%}
+StructuredDataDetection {{ clamd_dlp }}
+{% endif %}
+
+# This option sets the lowest number of Credit Card numbers found in a file
+# to generate a detect.
+# Default: 3
+{% if not clamd_dlp_min_cc is none -%}
+StructuredMinCreditCardCount {{ clamd_dlp_min_cc }}
+{% endif %}
+
+# With this option enabled the DLP module will search for valid Credit Card
+# numbers only. Debit and Private Label cards will not be searched.
+# Default: no
+{% if not clamd_dlp_cc_only is none -%}
+StructuredCCOnly {{ clamd_dlp_cc_only }}
+{% endif %}
+
+# This option sets the lowest number of Social Security Numbers found
+# in a file to generate a detect.
+# Default: 3
+{% if not clamd_dlp_min_ssn is none -%}
+StructuredMinSSNCount {{ clamd_dlp_min_ssn }}
+{% endif %}
+
+# With this option enabled the DLP module will search for valid
+# SSNs formatted as xxx-yy-zzzz
+# Default: yes
+{% if not clamd_dlp_ssn is none -%}
+StructuredSSNFormatNormal {{ clamd_dlp_ssn }}
+{% endif %}
+
+# With this option enabled the DLP module will search for valid
+# SSNs formatted as xxxyyzzzz
+# Default: no
+{% if not clamd_dlp_ssn_stripped is none -%}
+StructuredSSNFormatStripped {{ clamd_dlp_ssn_stripped }}
+{% endif %}
+
+
+##
+## HTML
+##
+
+# Perform HTML normalisation and decryption of MS Script Encoder code.
+# Default: yes
+# If you turn off this option, the original files will still be scanned, but
+# without additional processing.
+{% if not clamd_scan_html is none -%}
+ScanHTML {{ clamd_scan_html }}
+{% endif %}
+
+
+##
+## Archives
+##
+
+# ClamAV can scan within archives and compressed files.
+# If you turn off this option, the original files will still be scanned, but
+# without unpacking and additional processing.
+# Default: yes
+{% if not clamd_scan_archive is none -%}
+ScanArchive {{ clamd_scan_archive }}
+{% endif %}
+
+
+##
+## Limits
+##
+
+# The options below protect your system against Denial of Service attacks
+# using archive bombs.
+
+# This option sets the maximum amount of time to a scan may take.
+# In this version, this field only affects the scan time of ZIP archives.
+# Value of 0 disables the limit.
+# Note: disabling this limit or setting it too high may result allow scanning
+# of certain files to lock up the scanning process/threads resulting in a
+# Denial of Service.
+# Time is in milliseconds.
+# Default: 120000
+{% if not clamd_max_scan_time is none -%}
+MaxScanTime {{ clamd_max_scan_time }}
+{% endif %}
+
+# This option sets the maximum amount of data to be scanned for each input
+# file. Archives and other containers are recursively extracted and scanned
+# up to this value.
+# Value of 0 disables the limit
+# Note: disabling this limit or setting it too high may result in severe damage
+# to the system.
+# Default: 400M
+{% if not clamd_max_scan_size is none -%}
+MaxScanSize {{ clamd_max_scan_size }}
+{% endif %}
+
+# Files larger than this limit won't be scanned. Affects the input file itself
+# as well as files contained inside it (when the input file is an archive, a
+# document or some other kind of container).
+# Value of 0 disables the limit.
+# Note: disabling this limit or setting it too high may result in severe damage
+# to the system.
+# Technical design limitations prevent ClamAV from scanning files greater than
+# 2 GB at this time.
+# Default: 100M
+{% if not clamd_max_file_size is none -%}
+MaxFileSize {{ clamd_max_file_size }}
+{% endif %}
+
+# Nested archives are scanned recursively, e.g. if a Zip archive contains a RAR
+# file, all files within it will also be scanned. This options specifies how
+# deeply the process should be continued.
+# Note: setting this limit too high may result in severe damage to the system.
+# Default: 17
+# Maximum: 100
+{% if not clamd_max_recursion is none -%}
+MaxRecursion {{ clamd_max_recursion }}
+{% endif %}
+
+# Number of files to be scanned within an archive, a document, or any other
+# container file.
+# Value of 0 disables the limit.
+# Note: disabling this limit or setting it too high may result in severe damage
+# to the system.
+# Default: 10000
+{% if not clamd_max_files is none -%}
+MaxFiles {{ clamd_max_files }}
+{% endif %}
+
+# Maximum size of a file to check for embedded PE. Files larger than this value
+# will skip the additional analysis step.
+# Note: disabling this limit or setting it too high may result in severe damage
+# to the system.
+# Default: 40M
+{% if not clamd_max_embedded_pe is none -%}
+MaxEmbeddedPE {{ clamd_max_embedded_pe }}
+{% endif %}
+
+# Maximum size of a HTML file to normalize. HTML files larger than this value
+# will not be normalized or scanned.
+# Note: disabling this limit or setting it too high may result in severe damage
+# to the system.
+# Default: 40M
+{% if not clamd_max_html_norm is none -%}
+MaxHTMLNormalize {{ clamd_max_html_norm }}
+{% endif %}
+
+# Maximum size of a normalized HTML file to scan. HTML files larger than this
+# value after normalization will not be scanned.
+# Note: disabling this limit or setting it too high may result in severe damage
+# to the system.
+# Default: 8M
+{% if not clamd_max_html_plain is none -%}
+MaxHTMLNoTags {{ clamd_max_html_plain }}
+{% endif %}
+
+# Maximum size of a script file to normalize. Script content larger than this
+# value will not be normalized or scanned.
+# Note: disabling this limit or setting it too high may result in severe damage
+# to the system.
+# Default: 20M
+{% if not clamd_max_script_norm is none -%}
+MaxScriptNormalize {{ clamd_max_script_norm }}
+{% endif %}
+
+# Maximum size of a ZIP file to reanalyze type recognition. ZIP files larger
+# than this value will skip the step to potentially reanalyze as PE.
+# Note: disabling this limit or setting it too high may result in severe damage
+# to the system.
+# Default: 1M
+{% if not clamd_max_zip_typercg is none -%}
+MaxZipTypeRcg {{ clamd_max_zip_typercg }}
+{% endif %}
+
+# This option sets the maximum number of partitions of a raw disk image to be
+# scanned.
+# Raw disk images with more partitions than this value will have up to
+# the value number partitions scanned. Negative values are not allowed.
+# Note: setting this limit too high may result in severe damage or impact
+# performance.
+# Default: 50
+{% if not clamd_max_partions is none -%}
+MaxPartitions {{ clamd_max_partions }}
+{% endif %}
+
+# This option sets the maximum number of icons within a PE to be scanned.
+# PE files with more icons than this value will have up to the value number
+# icons scanned.
+# Negative values are not allowed.
+# WARNING: setting this limit too high may result in severe damage or impact
+# performance.
+# Default: 100
+{% if not clamd_max_iconspe is none -%}
+MaxIconsPE {{ clamd_max_iconspe }}
+{% endif %}
+
+# This option sets the maximum recursive calls for HWP3 parsing during
+# scanning. HWP3 files using more than this limit will be terminated and
+# alert the user.
+# Scans will be unable to scan any HWP3 attachments if the recursive limit
+# is reached.
+# Negative values are not allowed.
+# WARNING: setting this limit too high may result in severe damage or impact
+# performance.
+# Default: 16
+{% if not clamd_max_rec_hwp3 is none -%}
+MaxRecHWP3 {{ clamd_max_rec_hwp3 }}
+{% endif %}
+
+# This option sets the maximum calls to the PCRE match function during
+# an instance of regex matching.
+# Instances using more than this limit will be terminated and alert the user
+# but the scan will continue.
+# For more information on match_limit, see the PCRE documentation.
+# Negative values are not allowed.
+# WARNING: setting this limit too high may severely impact performance.
+# Default: 100000
+{% if not clamd_pcre_match_limit is none -%}
+PCREMatchLimit {{ clamd_pcre_match_limit }}
+{% endif %}
+
+# This option sets the maximum recursive calls to the PCRE match function
+# during an instance of regex matching.
+# Instances using more than this limit will be terminated and alert the user
+# but the scan will continue.
+# For more information on match_limit_recursion, see the PCRE documentation.
+# Negative values are not allowed and values > PCREMatchLimit are superfluous.
+# WARNING: setting this limit too high may severely impact performance.
+# Default: 2000
+{% if not clamd_pcre_rec_match_limit is none -%}
+PCRERecMatchLimit {{ clamd_pcre_rec_match_limit }}
+{% endif %}
+
+# This option sets the maximum filesize for which PCRE subsigs will be
+# executed. Files exceeding this limit will not have PCRE subsigs executed
+# unless a subsig is encompassed to a smaller buffer.
+# Negative values are not allowed.
+# Setting this value to zero disables the limit.
+# WARNING: setting this limit too high or disabling it may severely impact
+# performance.
+# Default: 100M
+{% if not clamd_pcre_max_filesize is none -%}
+PCREMaxFileSize {{ clamd_pcre_max_filesize }}
+{% endif %}
+
+# When AlertExceedsMax is set, files exceeding the MaxFileSize, MaxScanSize, or
+# MaxRecursion limit will be flagged with the virus name starting with
+# "Heuristics.Limits.Exceeded".
+# Default: no
+#AlertExceedsMax yes
+
+##
+## On-access Scan Settings
+##
+
+# Don't scan files larger than OnAccessMaxFileSize
+# Value of 0 disables the limit.
+# Default: 5M
+{% if not clamd_onaccess_max_filesize is none -%}
+OnAccessMaxFileSize {{ clamd_onaccess_max_filesize }}
+{% endif %}
+
+# Max number of scanning threads to allocate to the OnAccess thread pool at
+# startup. These threads are the ones responsible for creating a connection
+# with the daemon and kicking off scanning after an event has been processed.
+# To prevent clamonacc from consuming all clamd's resources keep this lower
+# than clamd's max threads.
+# Default: 5
+{% if not clamd_onaccess_max_threads is none -%}
+OnAccessMaxThreads {{ clamd_onaccess_max_threads }}
+{% endif %}
+
+# Max amount of time (in milliseconds) that the OnAccess client should spend
+# for every connect, send, and receive attempt when communicating with clamd
+# via curl.
+# Default: 5000 (5 seconds)
+{% if not clamd_onaccess_curl_timeout is none -%}
+OnAccessCurlTimeout {{ clamd_onaccess_curl_timeout }}
+{% endif %}
+
+# Toggles dynamic directory determination. Allows for recursively watching
+# include paths.
+# Default: no
+{% if not clamd_onaccess_dis_ddd is none -%}
+OnAccessDisableDDD {{ clamd_onaccess_dis_ddd }}
+{% endif %}
+
+# Set the include paths (all files inside them will be scanned). You can have
+# multiple OnAccessIncludePath directives but each directory must be added
+# in a separate line.
+# Default: disabled
+{% for item in clamd_onaccess_incl_path -%}
+OnAccessIncludePath {{ item }}
+{% endfor %}
+
+# Set the exclude paths. All subdirectories are also excluded.
+# Default: disabled
+{% for item in clamd_onaccess_excl_path -%}
+OnAccessExcludePath {{ item }}
+{% endfor %}
+
+# Modifies fanotify blocking behaviour when handling permission events.
+# If off, fanotify will only notify if the file scanned is a virus,
+# and not perform any blocking.
+# Default: no
+{% if not clamd_onaccess_prevention is none -%}
+OnAccessPrevention {{ clamd_onaccess_prevention }}
+{% endif %}
+
+# When using prevention, if this option is turned on, any errors that occur
+# during scanning will result in the event attempt being denied. This could
+# potentially lead to unwanted system behaviour with certain configurations,
+# so the client defaults this to off and prefers allowing access events in
+# case of scan or connection error.
+# Default: no
+{% if not clamd_onaccess_deny_onerror is none -%}
+OnAccessDenyOnError {{ clamd_onaccess_deny_onerror }}
+{% endif %}
+
+# Toggles extra scanning and notifications when a file or directory is
+# created or moved.
+# Requires the  DDD system to kick-off extra scans.
+# Default: no
+{% if not clamd_onaccess_ext_scanning is none -%}
+OnAccessExtraScanning {{ clamd_onaccess_ext_scanning }}
+{% endif %}
+
+# Set the  mount point to be scanned. The mount point specified, or the mount
+# point containing the specified directory will be watched. If any directories
+# are specified, this option will preempt (disable and ignore all options
+# related to) the DDD system. This option will result in verdicts only.
+# Note that prevention is explicitly disallowed to prevent common, fatal
+# misconfigurations. (e.g. watching "/" with prevention on and no exclusions
+# made on vital system directories)
+# It can be used multiple times.
+# Default: disabled
+{% for item in clamd_onaccess_mnt_path -%}
+OnAccessMountPath {{ item }}
+{% endfor %}
+
+# With this option you can exclude the root UID (0). Processes run under
+# root with be able to access all files without triggering scans or
+# permission denied events.
+# Note that if clamd cannot check the uid of the process that generated an
+# on-access scan event (e.g., because OnAccessPrevention was not enabled, and
+# the process already exited), clamd will perform a scan.  Thus, setting
+# OnAccessExcludeRootUID is not *guaranteed* to prevent every access by the
+# root user from triggering a scan (unless OnAccessPrevention is enabled).
+# Default: no
+{% if not clamd_onaccess_excl_rootuid is none -%}
+OnAccessExcludeRootUID {{ clamd_onaccess_excl_rootuid }}
+{% endif %}
+
+# With this option you can exclude specific UIDs. Processes with these UIDs
+# will be able to access all files without triggering scans or permission
+# denied events.
+# This option can be used multiple times (one per line).
+# Using a value of 0 on any line will disable this option entirely.
+# To exclude the root UID (0) please enable the OnAccessExcludeRootUID
+# option.
+# Also note that if clamd cannot check the uid of the process that generated an
+# on-access scan event (e.g., because OnAccessPrevention was not enabled, and
+# the process already exited), clamd will perform a scan.  Thus, setting
+# OnAccessExcludeUID is not *guaranteed* to prevent every access by the
+# specified uid from triggering a scan (unless OnAccessPrevention is enabled).
+# Default: disabled
+{% for item in clamd_onaccess_excl_uid -%}
+OnAccessExcludeUID {{ item }}
+{% endfor %}
+
+# This option allows exclusions via user names when using the on-access
+# scanning client. It can be used multiple times.
+# It has the same potential race condition limitations of the
+# OnAccessExcludeUID option.
+# Default: disabled
+{% for item in clamd_onaccess_excl_uname -%}
+OnAccessExcludeUname {{ item }}
+{% endfor %}
+
+# Number of times the OnAccess client will retry a failed scan due to
+# connection problems (or other issues).
+# Default: 0
+{% if not clamd_onaccess_retry is none -%}
+OnAccessRetryAttempts {{ clamd_onaccess_retry }}
+{% endif %}
+
+##
+## Bytecode
+##
+
+# With this option enabled ClamAV will load bytecode from the database.
+# It is highly recommended you keep this option on, otherwise you'll miss
+# detections for many new viruses.
+# Default: yes
+{% if not clamd_bytecode is none -%}
+Bytecode {{ clamd_bytecode }}
+{% endif %}
+
+# Set bytecode security level.
+# Possible values:
+#   None -      No security at all, meant for debugging.
+#               DO NOT USE THIS ON PRODUCTION SYSTEMS.
+#               This value is only available if clamav was built
+#               with --enable-debug!
+#   TrustSigned - Trust bytecode loaded from signed .c[lv]d files, insert
+#               runtime safety checks for bytecode loaded from other sources.
+#   Paranoid -  Don't trust any bytecode, insert runtime checks for all.
+# Recommended: TrustSigned, because bytecode in .cvd files already has these
+# checks.
+# Note that by default only signed bytecode is loaded, currently you can only
+# load unsigned bytecode in --enable-debug mode.
+#
+# Default: TrustSigned
+{% if not clamd_bytecode_security is none -%}
+BytecodeSecurity {{ clamd_bytecode_security }}
+{% endif %}
+
+# Allow loading bytecode from outside digitally signed .c[lv]d files.
+# **Caution**: You should NEVER run bytecode signatures from untrusted sources.
+# Doing so may result in arbitrary code execution.
+# Default: no
+{% if not clamd_bytecode_unsigned is none -%}
+BytecodeUnsigned {{ clamd_bytecode_unsigned }}
+{% endif %}
+
+# Set bytecode timeout in milliseconds.
+#
+# Default: 10000
+{% if not clamd_bytecode_timeout is none -%}
+BytecodeTimeout {{ clamd_bytecode_timeout }}
+{% endif %}
