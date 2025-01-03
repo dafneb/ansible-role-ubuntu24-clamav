@@ -1,0 +1,311 @@
+---
+# defaults file for ubuntu24-clamav
+
+## --------------------------------------------------------
+## Section: Required packages
+#
+updates_cache_valid_time: 3600
+clamav_packages:
+  - clamav
+  - clamav-daemon
+  - clamav-freshclam
+## --------------------------------------------------------
+
+## --------------------------------------------------------
+## Section: ClamAV daemon
+# Reference: https://github.com/Cisco-Talos/clamav/blob/main/etc/clamd.conf.sample
+#
+# Path to configuration file
+# This value is also used at freshclam configuration
+clamd_conf_path: /etc/clamav/clamd.conf
+# DatabaseDirectory (Default: hardcoded)
+# This value is also used at freshclam configuration
+clamd_db_directory:
+# FailIfCvdOlderThan (Default: -1)
+clamd_db_cvd_age_fail: 7
+# OfficialDatabaseOnly (Default: no)
+clamd_db_official_only:
+# LocalSocket (Default: disabled (must be specified by a user))
+clamd_socket:
+# LocalSocketGroup (Default: disabled (the primary group of the user running clamd))
+clamd_socket_group:
+# LocalSocketMode (Default: disabled (socket is world accessible))
+clamd_socket_mode:
+# TCPAddr (Default: no)
+clamd_socket_addr:
+# TCPSocket (Default: no)
+clamd_socket_port:
+# StreamMaxLength (Default: 100M)
+clamd_socket_stream_mlength:
+# StreamMaxPort (Default: 2048)
+clamd_socket_stream_uport:
+# StreamMinPort (Default: 1024)
+clamd_socket_stream_lport:
+# LogFile (Default: disabled)
+clamd_log_path:
+# LogVerbose (Default: no)
+clamd_log_verbose:
+# LogSyslog (Default: no)
+clamd_log_syslog: true
+# LogFacility (Default: LOG_LOCAL6)
+clamd_log_facility:
+# LogFileMaxSize (Default: 1M)
+clamd_log_filesize:
+# LogRotate (Default: no)
+clamd_log_rotate:
+# LogTime (Default: no)
+clamd_log_time:
+# LogClean (Default: no)
+clamd_log_clean:
+# LogFileUnlock (Default: no)
+clamd_log_unlock:
+# ExtendedDetectionInfo (Default: no)
+clamd_log_extended_info: true
+# PreludeEnable (Default: no)
+clamd_log_prelude:
+# PreludeAnalyzerName (Default: ClamAV)
+clamd_log_prelude_name:
+# AlertBrokenExecutables (Default: no)
+clamd_alert_broken_exec: true
+# AlertBrokenMedia (Default: no)
+clamd_alert_broken_media: true
+# AlertEncrypted (Default: no)
+clamd_alert_encrypted: true
+# AlertEncryptedArchive (Default: no)
+clamd_alert_encrypted_arch: true
+# AlertEncryptedDoc (Default: no)
+clamd_alert_encrypted_doc: true
+# AlertOLE2Macros (Default: no)
+clamd_alert_ole2_macros: true
+# AlertPhishingSSLMismatch (Default: no)
+clamd_alert_phish_ssl_mismatch: true
+# AlertPhishingCloak (Default: no)
+clamd_alert_phish_cloak:
+# AlertPartitionIntersection (Default: no)
+clamd_alert_part_intersection:
+# AllowAllMatchScan (Default: yes)
+clamd_allow_matchscan:
+# CrossFilesystems (Default: yes)
+clamd_x_filesystems:
+# DetectPUA (Default: no)
+clamd_scan_pua: true
+# DisableCache (Default: no)
+clamd_dis_cache:
+# DisableCertCheck (Default: no)
+clamd_dis_certcheck:
+# FollowDirectorySymlinks (Default: no)
+clamd_follow_dir_symlinks: true
+# FollowFileSymlinks (Default: no)
+clamd_follow_file_symlinks: true
+# ForceToDisk (Default: no)
+clamd_force_disk:
+# HeuristicAlerts (Default: yes)
+clamd_heur_alerts:
+# HeuristicScanPrecedence (Default: no)
+clamd_heur_scan_precedence:
+# PhishingScanURLs (Default: yes)
+clamd_phish_scan_urls:
+# PhishingSignatures (Default: yes)
+clamd_phish_signatures:
+# ScanArchive (Default: yes)
+clamd_scan_archive:
+# ScanELF (Default: yes)
+clamd_scan_elf:
+# ScanHTML (Default: yes)
+clamd_scan_html:
+# ScanHWP3 (Default: yes)
+clamd_scan_hwp3:
+# ScanImage (Default: yes)
+clamd_scan_image:
+# ScanImageFuzzyHash (Default: yes)
+clamd_scan_image_fuzz:
+# ScanMail (Default: yes)
+clamd_scan_mail:
+# ScanOLE2 (Default: yes)
+clamd_scan_ole2:
+# ScanOneNote (Default: yes)
+clamd_scan_onenote:
+# ScanPartialMessages (Default: no)
+clamd_scan_part_mess:
+# ScanPE (Default: yes)
+clamd_scan_pe:
+# ScanPDF (Default: yes)
+clamd_scan_pdf:
+# ScanSWF (Default: yes)
+clamd_scan_swf:
+# ScanXMLDOCS (Default: yes)
+clamd_scan_xmldocs:
+# StructuredDataDetection (Default: No)
+clamd_dlp: true
+# StructuredMinCreditCardCount (Default: 3)
+clamd_dlp_min_cc:
+# StructuredCCOnly (Default: no)
+clamd_dlp_cc_only:
+# StructuredMinSSNCount (Default: 3)
+clamd_dlp_min_ssn:
+# StructuredSSNFormatNormal (Default: yes)
+clamd_dlp_ssn:
+# StructuredSSNFormatStripped (Default: no)
+clamd_dlp_ssn_stripped:
+# ExcludePath (Default: scan all)
+clamd_scan_excl_path:
+  - /var/log/
+# ExcludePUA (Default: Load all categories (if DetectPUA is activated))
+# See https://github.com/vrtadmin/clamav-faq/blob/master/faq/faq-pua.md for
+# the complete list of PUA categories.
+clamd_scan_excl_pua: []
+# IncludePUA (Default: Load all categories (if DetectPUA is activated))
+# See https://github.com/vrtadmin/clamav-faq/blob/master/faq/faq-pua.md for
+# the complete list of PUA categories.
+clamd_scan_incl_pua: []
+# ExitOnOOM (Default: no)
+clamd_exit_oom:
+# Foreground (Default: no)
+clamd_foreground:
+# Debug (Default: no)
+clamd_debug:
+# LeaveTemporaryFiles (Default: no)
+clamd_leave_tmp_files:
+# GenerateMetadataJson (Default: no)
+clamd_getn_metadata_json:
+# JsonStoreHTMLUrls (Default: yes (if GenerateMetadataJson is used))
+clamd_json_html_urls:
+# MaxScanTime (Default: 120000)
+clamd_max_scan_time:
+# MaxScanSize (Default: 400M)
+clamd_max_scan_size: 1000M
+# MaxFileSize (Default: 100M)
+clamd_max_file_size: 400M 
+# MaxRecursion (Default: 17)
+clamd_max_recursion: 10
+# MaxFiles (Default: 10000)
+clamd_max_files:
+# MaxEmbeddedPE (Default: 40M)
+clamd_max_embedded_pe:
+# MaxDirectoryRecursion (Default: 15)
+clamd_max_dir_recursion:
+# MaxHTMLNormalize (Default: 40M)
+clamd_max_html_norm:
+# MaxHTMLNoTags (Default: 8M)
+clamd_max_html_plain:
+# MaxScriptNormalize (Default: 20M)
+clamd_max_script_norm:
+# MaxZipTypeRcg (Default: 1M)
+clamd_max_zip_typercg:
+# MaxPartitions (Default: 50)
+clamd_max_partions:
+# MaxIconsPE (Default: 100)
+clamd_max_iconspe:
+# MaxRecHWP3 (Default: 16)
+clamd_max_rec_hwp3:
+# MaxThreads (Default: 10)
+clamd_max_threads:
+# PCREMatchLimit (Default: 100000)
+clamd_pcre_match_limit:
+# PCRERecMatchLimit (Default: 2000)
+clamd_pcre_rec_match_limit:
+# PCREMaxFileSize (Default: 100M)
+clamd_pcre_max_filesize:
+# Bytecode (Default: yes)
+clamd_bytecode:
+# BytecodeSecurity (Default: TrustSigned)
+clamd_bytecode_security:
+# BytecodeTimeout (Default: 10000)
+clamd_bytecode_timeout:
+# BytecodeUnsigned (Default: no)
+clamd_bytecode_unsigned:
+# VirusEvent (Default: no)
+clamd_virus_event:
+# OnAccessCurlTimeout (Default: 5000 (5 seconds))
+clamd_onaccess_curl_timeout:
+# OnAccessDenyOnError (Default: no)
+clamd_onaccess_deny_onerror:
+# OnAccessDisableDDD (Default: no)
+clamd_onaccess_dis_ddd:
+# OnAccessExcludePath (Default: disabled)
+clamd_onaccess_excl_path:
+  - /var/log/
+# OnAccessExcludeRootUID (Default: no)
+clamd_onaccess_excl_rootuid:
+# OnAccessExcludeUID (Default: disabled)
+clamd_onaccess_excl_uid: []
+# OnAccessExcludeUname (Default: disabled)
+clamd_onaccess_excl_uname:
+  - clamav
+# OnAccessExtraScanning (Default: no)
+clamd_onaccess_ext_scanning: true
+# OnAccessIncludePath (Default: disabled)
+clamd_onaccess_incl_path:
+  - /
+# OnAccessMaxFileSize (Default: 5M)
+clamd_onaccess_max_filesize: 30M
+# OnAccessMaxThreads (Default: 5)
+clamd_onaccess_max_threads:
+# OnAccessMountPath (Default: disabled)
+clamd_onaccess_mnt_path: []
+# OnAccessPrevention (Default: no)
+clamd_onaccess_prevention: true
+# OnAccessRetryAttempts (Default: 0)
+clamd_onaccess_retry:
+## --------------------------------------------------------
+
+## --------------------------------------------------------
+## Section: ClamAV freshclam
+# Reference: https://github.com/Cisco-Talos/clamav/blob/main/etc/freshclam.conf.sample
+#
+# Path to configuration file
+freshclam_conf_path: /etc/clamav/freshclam.conf
+# UpdateLogFile (Default: disabled)
+freshclam_log_path:
+# LogVerbose (Default: no)
+freshclam_log_verbose:
+# LogSyslog (Default: no)
+freshclam_log_syslog: true
+# LogFacility (Default: LOG_LOCAL6)
+freshclam_log_facility:
+# LogFileMaxSize (Default: 1M)
+freshclam_log_filesize:
+# LogRotate (Default: no)
+freshclam_log_rotate:
+# LogTime (Default: no)
+freshclam_log_time:
+# Foreground (Default: no)
+freshclam_foreground:
+# Debug (Default: no)
+freshclam_debug:
+# Checks (Default: 12 (every two hours))
+freshclam_checks: 24
+# DNSDatabaseInfo (Default: current.cvd.clamav.net)
+freshclam_db_dnsinfo:
+# DatabaseMirror (Default: database.clamav.net)
+freshclam_db_mirror:
+  - database.clamav.net
+# DatabaseCustomURL (Default: no custom URLs -> empty list)
+freshclam_db_cusurl: []
+# PrivateMirror (Default: disabled -> empty list)
+freshclam_db_priv_mirror: []
+freshclam_http_proxy: false
+# HTTPProxyServer
+freshclam_http_proxy_srv: https://proxy.example.com
+# HTTPProxyPort
+freshclam_http_proxy_port: 1234
+# HTTPProxyUsername
+freshclam_http_proxy_username: username
+# HTTPProxyPassword
+freshclam_http_proxy_password: password
+# LocalIPAddress (Default: Use OS'es default outgoing IP address)
+freshclam_local_ip:
+# OnUpdateExecute (Default: disabled)
+freshclam_exc_updated:
+# OnErrorExecute (Default: disabled)
+freshclam_exc_error:
+# OnOutdatedExecute (Default: disabled)
+freshclam_exc_outdated:
+## --------------------------------------------------------
+
+## --------------------------------------------------------
+## Section:
+#
+
+## --------------------------------------------------------
+...
