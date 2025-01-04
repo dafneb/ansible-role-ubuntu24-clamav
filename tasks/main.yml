@@ -24,14 +24,16 @@
 
 - name: "Settings for ClamAV daemon"
   vars:
-    package: 'clamav-daemon'
+    package1: 'clamav'
+    package2: 'clamav-daemon'
   ansible.builtin.template:
     src: clamd.conf.j2
     dest: "{{ clamd_conf_path }}"
     mode: '0644'
     owner: root
     group: root
-  when: package in clamav_packages
+  when: (package1 in clamav_packages) or
+        (package2 in clamav_packages)
   notify: Restart clamav-daemon service  
   tags:
     - always
