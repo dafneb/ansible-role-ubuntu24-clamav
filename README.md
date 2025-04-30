@@ -7,6 +7,8 @@ ClamAV on Ubuntu 24
 ![GitHub commit activity](https://img.shields.io/github/commit-activity/w/dafneb/ansible-role-ubuntu24-clamav)
 ![GitHub contributors](https://img.shields.io/github/contributors/dafneb/ansible-role-ubuntu24-clamav)
 
+![GitHub Actions Workflow Status](https://img.shields.io/github/actions/workflow/status/dafneb/ansible-role-ubuntu24-clamav/ansible-lint.yml?label=ansible-lint)
+
 An Ansible role to install ClamAV Ubuntu 24.
 
 Requirements
