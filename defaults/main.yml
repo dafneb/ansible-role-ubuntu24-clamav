@@ -175,7 +175,7 @@ clamd_max_scan_time:
 # MaxScanSize (Default: 400M)
 clamd_max_scan_size: 1000M
 # MaxFileSize (Default: 100M)
-clamd_max_file_size: 400M 
+clamd_max_file_size: 400M
 # MaxRecursion (Default: 17)
 clamd_max_recursion: 10
 # MaxFiles (Default: 10000)

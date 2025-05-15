@@ -34,7 +34,7 @@
     group: root
   when: (package1 in clamav_packages) or
         (package2 in clamav_packages)
-  notify: Restart clamav-daemon service  
+  notify: Restart clamav-daemon service
   tags:
     - always
 
@@ -48,7 +48,7 @@
     owner: clamav
     group: adm
   when: package in clamav_packages
-  notify: Restart clamav-freshclam service  
+  notify: Restart clamav-freshclam service
   tags:
     - always
 
