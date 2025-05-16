@@ -2,9 +2,12 @@
 # handlers file for ubuntu24-clamav
 
 - name: Restart clamav-daemon service
+  vars:
+    package: 'clamav-daemon'
   ansible.builtin.service:
     name: clamav-daemon
     state: restarted
+  when: package in clamav_packages
 
 - name: Restart clamav-freshclam service
   ansible.builtin.service:
